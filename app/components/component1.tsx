@@ -1,7 +1,10 @@
-import React from "react";
-
-const component1 = () => {
-  return <div>component1</div>;
+export const Component1 = () => {
+  return (
+    <div
+      id="Component1
+    "
+      className="h-[300px] bg-red-500 text-white">
+      Component1
+    </div>
+  );
 };
-
-export default component1;

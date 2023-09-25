@@ -1,4 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
+import Component2 from "~/components/Component2";
+import Component3 from "~/components/Component3";
+import { Component1 } from "~/components/Component1";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,32 +13,9 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="text-red-600 font-semibold text-[30px]">
-        Welcome to Remix
-      </h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer">
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer">
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+      <Component1 />
+      <Component2 />
+      <Component3 />
     </div>
   );
 }
