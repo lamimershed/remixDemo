@@ -46,6 +46,9 @@ export default function Index() {
           <button onClick={() => swapdown(index)}>down</button>
         </div>
       ))}
+      <button className="bg-green-300 rounded-xl text-white text-[18px]">
+        save
+      </button>
     </div>
   );
 }
