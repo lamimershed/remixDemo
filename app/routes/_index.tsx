@@ -3,6 +3,7 @@ import Component2 from "~/components/Component2";
 import Component3 from "~/components/Component3";
 import { Component1 } from "~/components/Component1";
 import { useState } from "react";
+import { storeProductionData } from "~/services/getproducitonData";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,7 +39,7 @@ export default function Index() {
   };
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+    <div>
       {content.map((item: object, index: number) => (
         <div>
           <button onClick={() => swapup(index)}>up</button>
@@ -46,7 +47,9 @@ export default function Index() {
           <button onClick={() => swapdown(index)}>down</button>
         </div>
       ))}
-      <button className="bg-green-300 rounded-xl text-white text-[18px]">
+      <button
+        onClick={() => storeProductionData(content)}
+        className="bg-green-300 rounded-xl text-white text-[18px]">
         save
       </button>
     </div>
