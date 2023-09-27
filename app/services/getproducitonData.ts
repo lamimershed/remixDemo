@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 
 export async function getProductionData() {
-  console.log("======lamimershed")
+//   console.log("======lamimershed")
 
   const rawFileContent = await fs.readFile("data/production.json", {
     encoding: "utf-8",
