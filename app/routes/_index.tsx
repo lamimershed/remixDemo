@@ -3,8 +3,11 @@ import Component2 from "~/components/Component2";
 import Component3 from "~/components/Component3";
 import { Component1 } from "~/components/Component1";
 import { useState } from "react";
-import { storeProductionData } from "~/services/getproducitonData";
-import { useFetcher } from "@remix-run/react";
+import {
+  getProductionData,
+  storeProductionData,
+} from "~/services/getproducitonData";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,12 +17,14 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const production1: string[] = useLoaderData();
+  const components = {
+    Component1: Component1,
+    Component3: Component3,
+    Component2: Component2,
+  };
   const fetcher = useFetcher();
-  const [content, setContent] = useState([
-    { item: <Component1 />, itemName: "Component1" },
-    { item: <Component2 />, itemName: "Component2" },
-    { item: <Component3 />, itemName: "Component3" },
-  ]);
+  const [content, setContent] = useState(production1);
   const swapup = (index: number) => {
     console.log("==== index", content);
     const newBlock = [...content];
@@ -56,16 +61,23 @@ export default function Index() {
     <div>
       <button
         onClick={() => handleSave()}
-        className="bg-green-300 rounded-xl text-white text-[18px]">
+        className="bg-green-300 rounded-xl text-white text-[18px]"
+      >
         save
       </button>
-      {content.map((item: object, index: number) => (
-        <div>
-          <button onClick={() => swapup(index)}>up</button>
-          {item.item}
-          <button onClick={() => swapdown(index)}>down</button>
-        </div>
-      ))}
+      {content.map((item: object, index: number) => {
+        const Component = components[item.itemName];
+        const propsForComponent = {
+          title: item?.title,
+        };
+        return (
+          <div>
+            <button onClick={() => swapup(index)}>up</button>
+            <Component key={index} {...propsForComponent} />
+            <button onClick={() => swapdown(index)}>down</button>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -81,4 +93,9 @@ export async function action({ request }: any) {
 
   storeProductionData(data.production);
   return redirect("/");
+}
+export async function loader() {
+  const production = await getProductionData();
+  console.log("produciton == ", Array.isArray(production));
+  return production;
 }

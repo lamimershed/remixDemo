@@ -6,9 +6,9 @@ import { Component1 } from "~/components/Component1";
 
 const Production = () => {
   const components = {
-    Component1: <Component1 />,
-    Component3: <Component3 />,
-    Component2: <Component2 />,
+    Component1: Component1,
+    Component3: Component3,
+    Component2: Component2,
   };
   const production1: string[] = useLoaderData();
   console.log("produciton1 === ", production1);
@@ -16,7 +16,13 @@ const Production = () => {
     <div>
       production
       {production1.map(
-        (item: string, index: number) => components[item.itemName]
+        (item: string, index: number) => {
+          const Component = components[item.itemName];
+          const propsForComponent = {
+          title:item?.title
+        };
+            return <Component key={index} {...propsForComponent} />;
+        }
       )}
     </div>
   );
