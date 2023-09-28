@@ -2,12 +2,13 @@ import { redirect, type MetaFunction } from "@remix-run/node";
 import Component2 from "~/components/Component2";
 import Component3 from "~/components/Component3";
 import { Component1 } from "~/components/Component1";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getProductionData,
   storeProductionData,
 } from "~/services/getproducitonData";
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import useContentStore from "data/store";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,16 +18,20 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const production1: string[] = useLoaderData();
+  const production1: object[] = useLoaderData();
   const components = {
     Component1: Component1,
     Component3: Component3,
     Component2: Component2,
   };
   const fetcher = useFetcher();
-  const [content, setContent] = useState(production1);
+  useEffect(() => {
+    setContent(production1);
+  }, []);
+  const { content, setContent } = useContentStore();
+  // const [content, setContent] = useState(production1);
   const swapup = (index: number) => {
-    console.log("==== index", content);
+    // console.log("==== index", content);
     const newBlock = [...content];
     if (index > 0) {
       let temp = newBlock[index];
@@ -50,7 +55,7 @@ export default function Index() {
       lami.push(element.itemName);
     });
     const submitValue = JSON.stringify({ production: [...content] });
-    console.log("submitValue ===== ", submitValue);
+    // console.log("submitValue ===== ", submitValue);
     fetcher.submit(JSON.stringify({ production: [...content] }), {
       method: "POST",
       encType: "application/json",
@@ -61,19 +66,18 @@ export default function Index() {
     <div>
       <button
         onClick={() => handleSave()}
-        className="bg-green-300 rounded-xl text-white text-[18px]"
-      >
+        className="bg-green-300 rounded-xl text-white text-[18px]">
         save
       </button>
       {content.map((item: object, index: number) => {
-        const Component = components[item.itemName];
+        const Component = components[item.ComponentName];
         const propsForComponent = {
-          title: item?.title,
+          ...item.props,
         };
         return (
           <div>
             <button onClick={() => swapup(index)}>up</button>
-            <Component key={index} {...propsForComponent} />
+            <Component key={index} {...propsForComponent} showForm={true} />
             <button onClick={() => swapdown(index)}>down</button>
           </div>
         );
@@ -89,13 +93,13 @@ export async function action({ request }: any) {
   // const data = { production: formData.get("production") };
   // const data = Object.fromEntries(formData);
   const data = await request.json();
-  console.log("====data", data);
+  // console.log("====data", data);
 
   storeProductionData(data.production);
   return redirect("/");
 }
 export async function loader() {
   const production = await getProductionData();
-  console.log("produciton == ", Array.isArray(production));
+  // console.log("produciton == ", Array.isArray(production));
   return production;
 }

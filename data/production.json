@@ -1,1 +1,1 @@
-{"production":[{"title":"lami mershed","itemName":"Component1"},{"itemName":"Component2"},{"itemName":"Component3"}]}
+{"production":[{"ComponentName":"Component1","ComponentId":"laksdjfaksjdhf","props":{"title":"What is lamimershed","imageUrl":"https://remix.run/docs-images/contacts/01.webp","content":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500"}},{"ComponentName":"Component2"},{"ComponentName":"Component3"}]}
