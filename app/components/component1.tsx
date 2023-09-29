@@ -8,10 +8,10 @@ export const Component1 = (props: any) => {
   const { setBlockData } = useContentStore();
   const production1: string[] = useLoaderData();
   const component1Data = production1.find(
-    (obj) => obj?.ComponentName === "Component1"
+    (obj) => obj?.ComponentId === props.ComponentId
   );
   const component1Index = production1.findIndex(
-    (obj) => obj?.ComponentName === "Component1"
+    (obj) => obj?.ComponentId === props.ComponentId
   );
   // console.log("component1Data ======", component1Data);
 

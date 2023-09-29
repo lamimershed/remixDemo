@@ -9,6 +9,7 @@ import {
 } from "~/services/getproducitonData";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import useContentStore from "data/store";
+import DisplayComponents from "~/components/ DisplayComponents";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,6 +19,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const [showDisplayComponents, setShowDisplayComponents] = useState(false);
+  const [addIndex, setAddIndex] = useState<number>();
   const production1: object[] = useLoaderData();
   const components = {
     Component1: Component1,
@@ -28,7 +31,7 @@ export default function Index() {
   useEffect(() => {
     setContent(production1);
   }, []);
-  const { content, setContent } = useContentStore();
+  const { content, setContent, setDeleteBlock } = useContentStore();
   // const [content, setContent] = useState(production1);
   const swapup = (index: number) => {
     // console.log("==== index", content);
@@ -61,27 +64,68 @@ export default function Index() {
       encType: "application/json",
     });
   };
-
+  // const addBlock = () => {};
   return (
-    <div>
+    <div className="">
       <button
         onClick={() => handleSave()}
-        className="bg-green-300 rounded-xl text-white text-[18px]">
+        className="bg-green-300 rounded-xl text-white text-[18px] p-[8px_12px]">
         save
       </button>
       {content.map((item: object, index: number) => {
         const Component = components[item.ComponentName];
+        // console.log(item.ComponentId, "item . compoennte");
         const propsForComponent = {
           ...item.props,
         };
         return (
           <div>
-            <button onClick={() => swapup(index)}>up</button>
-            <Component key={index} {...propsForComponent} showForm={true} />
-            <button onClick={() => swapdown(index)}>down</button>
+            <button
+              className="bg-blue-400 rounded-xl text-white text-[18px] p-[5px_12px] mx-[20px]"
+              onClick={() => swapup(index)}>
+              up
+            </button>
+            <button
+              className="bg-blue-400 rounded-xl text-white text-[18px] p-[5px_12px] mx-[20px]"
+              onClick={() => swapdown(index)}>
+              down
+            </button>
+            <button
+              className="bg-blue-400 rounded-xl text-white text-[18px] p-[5px_12px] mx-[20px]"
+              onClick={() => {
+                setShowDisplayComponents(!showDisplayComponents);
+                setAddIndex(index);
+              }}>
+              Add
+            </button>
+            <button
+              className="bg-blue-400 rounded-xl text-white text-[18px] p-[5px_12px] mx-[20px]"
+              onClick={() => {
+                console.log("dleleted ", item.ComponentId);
+                setDeleteBlock(item.ComponentId);
+              }}>
+              delete
+            </button>
+            <Component
+              key={index}
+              {...propsForComponent}
+              showForm={true}
+              ComponentId={item.ComponentId}
+            />
           </div>
         );
       })}
+      {showDisplayComponents && <DisplayComponents index={addIndex} />}
+      {content.length === 0 && (
+        <button
+          className="bg-blue-400 rounded-xl text-white text-[18px] p-[5px_12px] mx-[20px]"
+          onClick={() => {
+            setShowDisplayComponents(!showDisplayComponents);
+            setAddIndex(index);
+          }}>
+          Add
+        </button>
+      )}
     </div>
   );
 }
